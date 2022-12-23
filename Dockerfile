@@ -7,13 +7,13 @@ ENV MAX_WORKERS=24
 ENV LOG_LEVEL="warning"
 ENV TIMEOUT="200"
 
-RUN mkdir /yolov5-fastapi
+RUN mkdir /Yolo-FastApi
 
-COPY requirements.txt /yolov5-fastapi
+COPY requirements.txt /Yolo-FastApi
 
-COPY . /yolov5-fastapi
+COPY . /Yolo-FastApi
 
-WORKDIR /yolov5-fastapi
+WORKDIR /Yolo-FastApi
 
 RUN pip install -r requirements.txt
 
