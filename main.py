@@ -30,6 +30,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+async def api_start():
+    return {"Result": "Please add '/docs' after url and hit"}
 
 @app.post("/object-to-json")
 async def detect_food_return_json_result(file: bytes = File(...)):
