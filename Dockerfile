@@ -1,6 +1,6 @@
 FROM tiangolo/uvicorn-gunicorn:python3.9-slim
 
-LABEL maintainer="team-erc"
+LABEL maintainer="team"
 
 ENV WORKERS_PER_CORE=4 
 ENV MAX_WORKERS=24
