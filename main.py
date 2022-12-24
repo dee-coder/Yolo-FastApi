@@ -35,7 +35,7 @@ async def api_start():
     return {"Result": "Please add '/docs' after url and hit"}
 
 @app.post("/detect-object")
-async def detect_food_return_json_result(file: bytes = File(...)):
+async def detect_custom_object_home_result(file: bytes = File(...)):
     input_image = get_image_from_bytes(file)
     results = model(input_image)
     detect_res = results.pandas().xyxy[0].to_json(orient="records")  # JSON img1 predictions
