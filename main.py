@@ -51,27 +51,16 @@ async def detect_custom_object_home_result(file: bytes = File(...)):
         img_base64.save(bytes_io, format="jpeg")
         img_data = Response(content=bytes_io.getvalue(), media_type="image/jpeg")
         print("img_data",img_data)
-    # return {
-    #     "result": detect_res
-    # }
-
     return img_data
 
 
 @app.post("/object-to-json")
-async def detect_food_return_base64_img():
-    # input_image = get_image_from_bytes(file)
-    # print("input_image =>", input_image)
-    # results = model(input_image)
-    # print("results =>", results)
-    # a = results.render()  # updates results.imgs with boxes and labels
-    # print("a =>", a)
-    # for img in a:
-    #     print('img', img)
-    #     bytes_io = io.BytesIO()
-    #     img_base64 = Image.fromarray(img)
-    #     img_base64.save(bytes_io, format="jpeg")
-    image_value = detect_res
+async def detect_object_return_json(file: bytes = File(...)):
+    input_image = get_image_from_bytes(file)
+    print("input_image =>", input_image)
+    results = model(input_image)
+    detect_res = results.pandas().xyxy[0].to_json(orient="records")  # JSON img1 predictions
+    detect_res = json.loads(detect_res)
     return {
         "result": detect_res
     }
