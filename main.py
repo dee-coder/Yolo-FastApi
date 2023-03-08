@@ -1,11 +1,13 @@
-from fastapi import FastAPI, File
+from fastapi import FastAPI, File, UploadFile
 from segmentation import get_yolov5, get_image_from_bytes
 from starlette.responses import Response
 import io
 from PIL import Image
 import json
 from fastapi.middleware.cors import CORSMiddleware
+import uuid
 
+IMAGEDIR = "images/"
 
 model = get_yolov5()
 
@@ -36,12 +38,16 @@ async def api_start():
 
 @app.post("/detect-object")
 async def detect_custom_object_home_result(file: bytes = File(...)):
+    print(File)
     input_image = get_image_from_bytes(file)
+    print("input_image =>", input_image)
+    print("input_image_type =>", type(input_image))
     results = model(input_image)
+    print("results =>", results)
     detect_res = results.pandas().xyxy[0].to_json(orient="records")  # JSON img1 predictions
     detect_res = json.loads(detect_res)
     b = results.render()
-    print("b =>", b)
+    print("b =>", b[0])
     for img in b:
         print('img', img)
         bytes_io = io.BytesIO()
@@ -64,3 +70,15 @@ async def detect_object_return_json(file: bytes = File(...)):
     return {
         "result": detect_res
     }
+
+
+@app.post("/upload-object")
+async def upload_image(file: UploadFile = File(...)):
+    file.filename = f"{uuid.uuid4()}.jpeg"
+    contents = await file.read()
+
+    #save the file
+    with open(f"{IMAGEDIR}{file.filename}", "wb") as f:
+        f.write(contents)
+
+    return {"filename": file.filename}
