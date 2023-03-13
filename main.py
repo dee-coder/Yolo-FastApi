@@ -66,8 +66,11 @@ async def detect_object_return_json(file: bytes = File(...)):
     input_image = get_image_from_bytes(file)
     print("input_image =>", input_image)
     results = model(input_image)
+    print("results =>", results)
     detect_res = results.pandas().xyxy[0].to_json(orient="records")  # JSON img1 predictions
+    print("detect_res =>", detect_res)
     detect_res = json.loads(detect_res)
+    print("detect_res_2 =>", detect_res)
     return {
         "result": detect_res
     }
